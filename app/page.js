@@ -9,6 +9,47 @@ export default function Home() {
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [emojiPool1, setEmojiPool1] = useState([]);
   const [emojiPool2, setEmojiPool2] = useState([]);
+  const [player1Emojis, setPlayer1Emojis] = useState(null);
+  const [player2Emojis, setPlayer2Emojis] = useState(null);
+  const [winner, setWinner] = useState(null);
+
+  function getRandomEmoji() {
+    const pool = currentPlayer === 1 ? emojiPool1 : emojiPool2;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  const handleCellClick = (index) => {
+    if (board[index]) return;
+
+    const currentEmojis =
+      currentPlayer === 1 ? [...player1Emojis] : [...player2Emojis];
+    const oldestIndex = currentEmojis[0]?.index;
+    if (currentEmojis.length === 3 && index === oldestIndex) return;
+
+    if (currentEmojis.length === 3) {
+      setBoard((prev) => {
+        const newBoard = [...prev];
+        newBoard[oldestIndex] = null;
+        return newBoard;
+      });
+      currentEmojis.shift();
+
+      const emoji = getRandomEmoji(selectedCategories[currentPlayer]);
+      currentEmojis.push({ index, emoji });
+
+      setBoard((prev) => {
+        const newBoard = [...prev];
+        newBoard[index] = { player: currentPlayer, emoji };
+        return newBoard;
+      });
+
+      if (currentPlayer === 1) setPlayer1Emojis(currentEmojis);
+      else setPlayer2Emojis(currentEmojis);
+
+      checkWinner();
+      setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+    }
+  };
 
   return (
     <div>
