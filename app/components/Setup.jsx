@@ -22,20 +22,20 @@ const Setup = (props) => {
     <h1 className="text-3xl font-bold text-center mb-4">Setup</h1>
     <div className="flex flex-col items-center">
       <div className="mb-4">
-        <label htmlFor="player1" className="block text-lg mb-2">Player 1:</label>
-        <select id="player1" className="border rounded p-2">
+        <label className="block text-lg mb-2">Player 1:</label>
+        <select className="border rounded p-2" onChange={(e)=>handleCategoryChange1(e.target.value)}>
           {Object.keys(EMOJI_CATEGORIES).map((category) => (
-            <option key={category} value={category} onClick={()=>handleCategoryChange1(category)}>
+            <option key={category} value={category} >
               {category}
             </option>
           ))}
         </select>
       </div>
       <div className="mb-4">
-        <label htmlFor="player2" className="block text-lg mb-2">Player 2:</label>
-        <select id="player2" className="border rounded p-2">
+        <label className="block text-lg mb-2">Player 2:</label>
+        <select className="border rounded p-2" onChange={(e)=>handleCategoryChange2(e.target.value)}>
           {Object.keys(EMOJI_CATEGORIES).map((category) => (
-            <option key={category} value={category} onClick={()=>handleCategoryChange2(category)}>
+            <option key={category} value={category} >
               {category}
             </option>
           ))}
