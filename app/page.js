@@ -13,41 +13,72 @@ export default function Home() {
   const [player2Emojis, setPlayer2Emojis] = useState([]);
   const [winner, setWinner] = useState(null);
 
+  const winningCombos = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
   function getRandomEmoji() {
     const pool = currentPlayer === 1 ? emojiPool1 : emojiPool2;
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
-  const handleCellClick = (index) => {
+const handleCellClick = (index) => {
   if (board[index]) return;
 
   const currentEmojis =
     currentPlayer === 1 ? [...player1Emojis] : [...player2Emojis];
 
+  const newBoard = [...board];
+
+
   if (currentEmojis.length === 3) {
-    const oldestIndex = currentEmojis[0].index;
+    const oldestIndex = currentEmojis[0]?.index;
     if (index === oldestIndex) return;
 
-    setBoard((prev) => {
-      const newBoard = [...prev];
-      newBoard[oldestIndex] = null;
-      return newBoard;
-    });
+    newBoard[oldestIndex] = null;
     currentEmojis.shift();
   }
 
   const emoji = getRandomEmoji();
   currentEmojis.push({ index, emoji });
-
-  const newBoard = [...board];
   newBoard[index] = { player: currentPlayer, emoji };
+
   setBoard(newBoard);
 
-  if (currentPlayer === 1) setPlayer1Emojis(currentEmojis);
-  else setPlayer2Emojis(currentEmojis);
+  if (currentPlayer === 1) {
+    setPlayer1Emojis(currentEmojis);
+  } else {
+    setPlayer2Emojis(currentEmojis);
+  }
+
+  checkWinner(newBoard);
 
   setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
 };
+
+  const checkWinner = (board) => {
+    for (let combo of winningCombos) {
+      const [a, b, c] = combo;
+      if (
+        board[a] &&
+        board[b] &&
+        board[c] &&
+        board[a].player === board[b].player &&
+        board[a].player === board[c].player
+      ) {
+        setWinner(board[a].player);
+        setGameState("finished");
+        return;
+      }
+    }
+  };
 
   return (
     <div>
@@ -86,6 +117,8 @@ export default function Home() {
                 setCurrentPlayer(1);
                 setPlayer1Emojis([]);
                 setPlayer2Emojis([]);
+                setEmojiPool1([]);
+                setEmojiPool2([]);
                 setWinner(null);
               }}
             >
