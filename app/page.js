@@ -3,7 +3,7 @@ import { useState } from "react";
 import Setup from "./components/Setup";
 import Cell from "./components/Cell";
 
-export default function Home() {
+export default function BlinkTicTacToe() {
   const [gameState, setGameState] = useState("setup");
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState(1);
@@ -14,59 +14,48 @@ export default function Home() {
   const [winner, setWinner] = useState(null);
   const [winningCells, setWinningCells] = useState([]);
 
-
-  const winningCombos = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
+  const winningCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6],];
 
   function getRandomEmoji() {
     const pool = currentPlayer === 1 ? emojiPool1 : emojiPool2;
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
-const handleCellClick = (index) => {
-  if (board[index]) return;
+  const handleCellClick = (index) => {
+    if (board[index]) return;
 
-  const currentEmojis =
-    currentPlayer === 1 ? [...player1Emojis] : [...player2Emojis];
+    const currentEmojis =
+      currentPlayer === 1 ? [...player1Emojis] : [...player2Emojis];
 
-  const newBoard = [...board];
+    const newBoard = [...board];
 
+    if (currentEmojis.length === 3) {
+      const oldestIndex = currentEmojis[0]?.index;
+      if (index === oldestIndex) return;
 
-  if (currentEmojis.length === 3) {
-    const oldestIndex = currentEmojis[0]?.index;
-    if (index === oldestIndex) return;
+      newBoard[oldestIndex] = null;
+      currentEmojis.shift();
+    }
 
-    newBoard[oldestIndex] = null;
-    currentEmojis.shift();
-  }
+    const emoji = getRandomEmoji();
+    currentEmojis.push({ index, emoji });
+    newBoard[index] = { player: currentPlayer, emoji };
 
-  const emoji = getRandomEmoji();
-  currentEmojis.push({ index, emoji });
-  newBoard[index] = { player: currentPlayer, emoji };
+    setBoard(newBoard);
 
-  setBoard(newBoard);
+    if (currentPlayer === 1) {
+      setPlayer1Emojis(currentEmojis);
+    } else {
+      setPlayer2Emojis(currentEmojis);
+    }
 
-  if (currentPlayer === 1) {
-    setPlayer1Emojis(currentEmojis);
-  } else {
-    setPlayer2Emojis(currentEmojis);
-  }
+    const win = checkWinner(newBoard);
+    if (win) {
+      setWinningCells(win)
+    }
 
-  const win=checkWinner(newBoard);
-  if(win){
-    setWinningCells(win)
-  }
-
-  setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
-};
+    setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+  };
 
   const checkWinner = (board) => {
     for (let combo of winningCombos) {
@@ -86,8 +75,13 @@ const handleCellClick = (index) => {
   };
 
   return (
-    <div>
-      <h1 className="text-6xl font-bold text-center ">Blink Tic Tac Toe</h1>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
+      <div className="p-7">
+        <h1 className="text-6xl font-bold text-center bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent animate-pulse">
+          ✨ Blink Tic Tac Toe ✨
+        </h1>
+      </div>
+      
       {gameState === "setup" && (
         <Setup
           setEmojiPool1={setEmojiPool1}
@@ -95,44 +89,59 @@ const handleCellClick = (index) => {
           setGameState={setGameState}
         />
       )}
+      
       {gameState === "finished" && (
-         <h2 className="text-4xl font-bold text-center">
-            Player {winner} Wins!
+        <div className="text-center pt-8 mb-8">
+          <h2 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent animate-bounce">
+            🎉 Player {winner} Wins! 🎉
           </h2>
+        </div>
       )}
       
-      {(gameState === "playing" || gameState=="finished") && (
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="grid grid-cols-3 gap-2">
-            {board.map((cell, idx) => (
-              <Cell
-                key={idx}
-                value={cell}
-                color={winningCells.includes(idx) ? "yellow" : "white"}
-                onClick={() => handleCellClick(idx)}
-              />
-            ))}
+      {(gameState === "playing" || gameState === "finished") && (
+        <div className="flex flex-col items-center justify-center space-y-8">
+          {gameState === "playing" && (
+            <div className="text-center">
+              <h3 className="text-3xl font-bold text-white ">
+                Current Player: <span className={currentPlayer === 1 ? "text-cyan-400" : "text-pink-400"}>Player {currentPlayer}</span>
+              </h3>
+            </div>
+          )}
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 shadow-2xl">
+            <div className="grid grid-cols-3 gap-4">
+              {board.map((cell, idx) => (
+                <Cell
+                  key={idx}
+                  value={cell}
+                  color={winningCells.includes(idx) ? "yellow" : "white"}
+                  disabled={gameState==="finished"}
+                  onClick={() => handleCellClick(idx)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
+      
       {gameState === "finished" && (
-        <div className="flex justify-center">
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded text-center"
-              onClick={() => {
-                setGameState("setup");
-                setBoard(Array(9).fill(null));
-                setCurrentPlayer(1);
-                setPlayer1Emojis([]);
-                setPlayer2Emojis([]);
-                setEmojiPool1([]);
-                setEmojiPool2([]);
-                setWinner(null);
-                setWinningCells([]);
-              }}
-            >
-              Restart Game
-            </button>
+        <div className="flex justify-center pb-8 mt-4">
+          <button
+            className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-xl px-8 py-4 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
+            onClick={() => {
+              setGameState("setup");
+              setBoard(Array(9).fill(null));
+              setCurrentPlayer(1);
+              setPlayer1Emojis([]);
+              setPlayer2Emojis([]);
+              setEmojiPool1([]);
+              setEmojiPool2([]);
+              setWinner(null);
+              setWinningCells([]);
+            }}
+          >
+            🔄 Play Again! 🔄
+          </button>
         </div>
       )}
     </div>
