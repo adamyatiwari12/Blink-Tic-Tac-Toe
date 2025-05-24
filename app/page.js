@@ -9,8 +9,8 @@ export default function Home() {
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [emojiPool1, setEmojiPool1] = useState([]);
   const [emojiPool2, setEmojiPool2] = useState([]);
-  const [player1Emojis, setPlayer1Emojis] = useState(null);
-  const [player2Emojis, setPlayer2Emojis] = useState(null);
+  const [player1Emojis, setPlayer1Emojis] = useState([]);
+  const [player2Emojis, setPlayer2Emojis] = useState([]);
   const [winner, setWinner] = useState(null);
 
   function getRandomEmoji() {
@@ -19,37 +19,35 @@ export default function Home() {
   }
 
   const handleCellClick = (index) => {
-    if (board[index]) return;
+  if (board[index]) return;
 
-    const currentEmojis =
-      currentPlayer === 1 ? [...player1Emojis] : [...player2Emojis];
-    const oldestIndex = currentEmojis[0]?.index;
-    if (currentEmojis.length === 3 && index === oldestIndex) return;
+  const currentEmojis =
+    currentPlayer === 1 ? [...player1Emojis] : [...player2Emojis];
 
-    if (currentEmojis.length === 3) {
-      setBoard((prev) => {
-        const newBoard = [...prev];
-        newBoard[oldestIndex] = null;
-        return newBoard;
-      });
-      currentEmojis.shift();
+  if (currentEmojis.length === 3) {
+    const oldestIndex = currentEmojis[0].index;
+    if (index === oldestIndex) return;
 
-      const emoji = getRandomEmoji(selectedCategories[currentPlayer]);
-      currentEmojis.push({ index, emoji });
+    setBoard((prev) => {
+      const newBoard = [...prev];
+      newBoard[oldestIndex] = null;
+      return newBoard;
+    });
+    currentEmojis.shift();
+  }
 
-      setBoard((prev) => {
-        const newBoard = [...prev];
-        newBoard[index] = { player: currentPlayer, emoji };
-        return newBoard;
-      });
+  const emoji = getRandomEmoji();
+  currentEmojis.push({ index, emoji });
 
-      if (currentPlayer === 1) setPlayer1Emojis(currentEmojis);
-      else setPlayer2Emojis(currentEmojis);
+  const newBoard = [...board];
+  newBoard[index] = { player: currentPlayer, emoji };
+  setBoard(newBoard);
 
-      checkWinner();
-      setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
-    }
-  };
+  if (currentPlayer === 1) setPlayer1Emojis(currentEmojis);
+  else setPlayer2Emojis(currentEmojis);
+
+  setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+};
 
   return (
     <div>
@@ -75,7 +73,26 @@ export default function Home() {
         </div>
       )}
       {gameState === "finished" && (
-        <div>{/* Display winner and reset button */}</div>
+        <div>
+          <h2 className="text-4xl font-bold text-center">
+            Player {winner} Wins!
+          </h2>
+          <div className="flex justify-center mt-4">
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={() => {
+                setGameState("setup");
+                setBoard(Array(9).fill(null));
+                setCurrentPlayer(1);
+                setPlayer1Emojis([]);
+                setPlayer2Emojis([]);
+                setWinner(null);
+              }}
+            >
+              Restart Game
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
