@@ -4,6 +4,7 @@ import Setup from "./components/Setup";
 import Cell from "./components/Cell";
 
 export default function BlinkTicTacToe() {
+
   const [gameState, setGameState] = useState("setup");
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState(1);
@@ -22,8 +23,12 @@ export default function BlinkTicTacToe() {
   }
 
   const handleCellClick = (index) => {
-    if (board[index]) return;
-
+    if (board[index]){
+      playSound("error.mp3");
+      return;
+    }
+    playSound("pop.mp3");
+    
     const currentEmojis =
       currentPlayer === 1 ? [...player1Emojis] : [...player2Emojis];
 
@@ -68,11 +73,17 @@ export default function BlinkTicTacToe() {
         board[a].player === board[c].player
       ) {
         setWinner(board[a].player);
+        playSound("gameWin.mp3");
         setGameState("finished");
         return combo;
       }
     }
   };
+
+  const playSound = (filename) => {
+  const audio = new Audio(`/sounds/${filename}`);
+  audio.play();
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
@@ -138,6 +149,7 @@ export default function BlinkTicTacToe() {
               setEmojiPool2([]);
               setWinner(null);
               setWinningCells([]);
+              playSound("playAgain.mp3");
             }}
           >
             🔄 Play Again! 🔄

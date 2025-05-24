@@ -103,7 +103,11 @@ const Setup = (props) => {
           </div>
           <button 
             className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold text-xl px-8 py-4 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95 mt-6" 
-            onClick={()=> props.setGameState('playing')}
+            onClick={()=> {
+              props.setGameState('playing')
+              const audio = new Audio('/sounds/gameStart.mp3');
+              audio.play();
+            }}
           >
             🚀 Start Game! 🚀
           </button>
