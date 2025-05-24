@@ -4,7 +4,7 @@ import Setup from "./components/Setup";
 import Cell from "./components/Cell";
 
 export default function Home() {
-  const [gameState, setGameState] = useState("setup"); // 'setup', 'playing', 'finished'
+  const [gameState, setGameState] = useState("setup");
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [emojiPool1, setEmojiPool1] = useState([]);
@@ -12,6 +12,8 @@ export default function Home() {
   const [player1Emojis, setPlayer1Emojis] = useState([]);
   const [player2Emojis, setPlayer2Emojis] = useState([]);
   const [winner, setWinner] = useState(null);
+  const [winningCells, setWinningCells] = useState([]);
+
 
   const winningCombos = [
     [0, 1, 2],
@@ -58,7 +60,10 @@ const handleCellClick = (index) => {
     setPlayer2Emojis(currentEmojis);
   }
 
-  checkWinner(newBoard);
+  const win=checkWinner(newBoard);
+  if(win){
+    setWinningCells(win)
+  }
 
   setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
 };
@@ -75,7 +80,7 @@ const handleCellClick = (index) => {
       ) {
         setWinner(board[a].player);
         setGameState("finished");
-        return;
+        return combo;
       }
     }
   };
@@ -90,13 +95,20 @@ const handleCellClick = (index) => {
           setGameState={setGameState}
         />
       )}
-      {gameState === "playing" && (
+      {gameState === "finished" && (
+         <h2 className="text-4xl font-bold text-center">
+            Player {winner} Wins!
+          </h2>
+      )}
+      
+      {(gameState === "playing" || gameState=="finished") && (
         <div className="flex items-center justify-center min-h-screen">
           <div className="grid grid-cols-3 gap-2">
             {board.map((cell, idx) => (
               <Cell
                 key={idx}
                 value={cell}
+                color={winningCells.includes(idx) ? "yellow" : "white"}
                 onClick={() => handleCellClick(idx)}
               />
             ))}
@@ -104,13 +116,9 @@ const handleCellClick = (index) => {
         </div>
       )}
       {gameState === "finished" && (
-        <div>
-          <h2 className="text-4xl font-bold text-center">
-            Player {winner} Wins!
-          </h2>
-          <div className="flex justify-center mt-4">
+        <div className="flex justify-center">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white px-4 py-2 rounded text-center"
               onClick={() => {
                 setGameState("setup");
                 setBoard(Array(9).fill(null));
@@ -120,11 +128,11 @@ const handleCellClick = (index) => {
                 setEmojiPool1([]);
                 setEmojiPool2([]);
                 setWinner(null);
+                setWinningCells([]);
               }}
             >
               Restart Game
             </button>
-          </div>
         </div>
       )}
     </div>
