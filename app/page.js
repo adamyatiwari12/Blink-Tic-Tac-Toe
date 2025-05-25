@@ -22,7 +22,10 @@ export default function BlinkTicTacToe() {
   
   function getRandomEmoji() {
     const pool = currentPlayer === 1 ? emojiPool1 : emojiPool2;
-    return pool[Math.floor(Math.random() * pool.length)];
+    const curr= currentPlayer === 1 ? player1Emojis : player2Emojis;
+    const used = curr.map(e => e.emoji);
+  const available = pool.filter(elem => !used.includes(elem));
+  return available[Math.floor(Math.random() * available.length)];
   };
   
   const playSound = (filename) => {
@@ -88,25 +91,26 @@ export default function BlinkTicTacToe() {
     }
   };
 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
-      <div className="p-7">
-        <h1 className="text-6xl font-bold text-center bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent animate-pulse">
+      <div className="p-4 sm:p-6 lg:p-7 relative">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent animate-pulse px-2">
           ✨ Blink Tic Tac Toe ✨
         </h1>
         <button
-          className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full transition-all duration-200 hover:scale-105"
+          className="absolute top-4 right-4 max-sm:right-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-2 px-3 sm:px-4 rounded-full transition-all duration-200 hover:scale-105 text-sm sm:text-base"
           onClick={() => setShowHelp(true)}
         >
-          <HelpCircle className="inline"/> Help
+          <HelpCircle className="inline w-3 h-3 sm:w-5 sm:h-5"/> <span className="hidden sm:inline">Help</span>
         </button>
       </div>
 
       {showHelp && <HelpSection setShowHelp={setShowHelp} />}
-      
+
       {gameState === "setup" && (
         <Setup
+          emojiPool1={emojiPool1}
+          emojiPool2={emojiPool2}
           setEmojiPool1={setEmojiPool1}
           setEmojiPool2={setEmojiPool2}
           setGameState={setGameState}
@@ -114,25 +118,25 @@ export default function BlinkTicTacToe() {
       )}
       
       {gameState === "finished" && (
-        <div className="text-center pt-8 mb-8">
-          <h2 className="text-5xl font-bold bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent animate-bounce">
+        <div className="text-center pt-4 sm:pt-6 lg:pt-8 mb-4 sm:mb-6 lg:mb-8 px-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent animate-bounce">
             🎉 Player {winner} Wins! 🎉
           </h2>
         </div>
       )}
       
       {(gameState === "playing" || gameState === "finished") && (
-        <div className="flex flex-col items-center justify-center space-y-8">
+        <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-6 lg:space-y-8 px-4">
           {gameState === "playing" && (
             <div className="text-center">
-              <h3 className="text-3xl font-bold text-white ">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
                 Current Player: <span className={currentPlayer === 1 ? "text-cyan-400" : "text-pink-400"}>Player {currentPlayer}</span>
               </h3>
             </div>
           )}
           
-          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 shadow-2xl">
-            <div className="grid grid-cols-3 gap-4">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
               {board.map((cell, idx) => (
                 <Cell
                   key={idx}
@@ -148,9 +152,9 @@ export default function BlinkTicTacToe() {
       )}
       
       {gameState === "finished" && (
-        <div className="flex justify-center pb-8 mt-4">
+        <div className="flex justify-center pb-4 sm:pb-6 lg:pb-8 mt-4 px-4">
           <button
-            className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-xl px-8 py-4 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
+            className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
             onClick={() => {
               setGameState("setup");
               setBoard(Array(9).fill(null));

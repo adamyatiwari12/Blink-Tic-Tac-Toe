@@ -6,7 +6,7 @@ const Cell = ({value,onClick,color,disabled}) => {
 
   return (
     <button 
-      className={`${colorClass} h-36 w-36 text-4xl border-4 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-bold`} 
+      className={`${colorClass} h-20 w-20 sm:h-28 sm:w-28 lg:h-36 lg:w-36 text-2xl sm:text-3xl lg:text-4xl border-2 sm:border-3 lg:border-4 rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-bold`} 
       onClick={onClick}
       disabled={disabled}
     >
