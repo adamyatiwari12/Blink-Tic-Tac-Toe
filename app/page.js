@@ -135,7 +135,7 @@ export default function BlinkTicTacToe() {
             </div>
           )}
           
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 sm:p-6 lg:p-8 shadow-2xl">
             <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:gap-4">
               {board.map((cell, idx) => (
                 <Cell
@@ -154,7 +154,7 @@ export default function BlinkTicTacToe() {
       {gameState === "finished" && (
         <div className="flex justify-center pb-4 sm:pb-6 lg:pb-8 mt-4 px-4">
           <button
-            className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg transform transition-all duration-200 hover:scale-105 active:scale-95"
+            className="bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-lg sm:text-xl px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg duration-200 hover:scale-105"
             onClick={() => {
               setGameState("setup");
               setBoard(Array(9).fill(null));

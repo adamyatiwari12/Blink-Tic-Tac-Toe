@@ -49,7 +49,7 @@ const HelpSection = ({setShowHelp}) => {
             
             <div className="mt-4 sm:mt-5 lg:mt-6 text-center">
               <button
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full transition-all duration-200 hover:scale-105 text-sm sm:text-base"
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-2 px-4 sm:py-3 sm:px-6 rounded-full duration-200 hover:scale-105 text-sm sm:text-base"
                 onClick={() => setShowHelp(false)}
               >
                 Got it! 🚀

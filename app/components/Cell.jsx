@@ -2,11 +2,11 @@ import React from 'react'
 
 const Cell = ({value,onClick,color,disabled}) => {
 
-  const colorClass = color === "white" ? "bg-gradient-to-br from-purple-100 to-pink-100 border-purple-300" : "bg-gradient-to-br from-yellow-300 to-orange-400 border-yellow-500 shadow-lg transform scale-105";
+  const colorClass = color === "white" ? "bg-pink-100" : "bg-gradient-to-br from-yellow-300 to-orange-400";
 
   return (
     <button 
-      className={`${colorClass} h-20 w-20 sm:h-28 sm:w-28 lg:h-36 lg:w-36 text-2xl sm:text-3xl lg:text-4xl border-2 sm:border-3 lg:border-4 rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-xl active:scale-95 font-bold`} 
+      className={`${colorClass} h-20 w-20 sm:h-28 sm:w-28 lg:h-36 lg:w-36 text-3xl sm:text-5xl lg:text-6xl rounded-lg duration-200 hover:scale-110 font-bold`} 
       onClick={onClick}
       disabled={disabled}
     >
