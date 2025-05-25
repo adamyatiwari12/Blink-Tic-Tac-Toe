@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+✨ Blink Tic Tac Toe ✨
 
-## Getting Started
+A fun twist on the classic Tic Tac Toe, where emojis vanish and strategy shifts constantly! Built using React with a vibrant UI and interactive gameplay.
 
-First, run the development server:
+Tech Stack: 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+HTML
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+React (with useState for state management)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Tailwind CSS (for styling and responsiveness)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Lucide React (for icons)
 
-## Learn More
+JavaScript (for logic and audio)
 
-To learn more about Next.js, take a look at the following resources:
+Emoji Categories: Animals, Food, Sports, Nature, Space, Faces, Weather, Travel, Music, Technology, Flags
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Vanishing Feature:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Each player is allowed only 3 active emojis on the board at a time. Here's how it works:
+When a player places a 4th emoji, their oldest emoji vanishes.
 
-## Deploy on Vercel
+if (currentEmojis.length === 3) {
+  const oldestIndex = currentEmojis[0]?.index;
+  newBoard[oldestIndex] = null;
+  currentEmojis.shift();
+}
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Explanation: The currentEmojis array stores the emojis placed by the current player during the game. When the length of this array reaches 3, it means the player already has three emojis on the board. At this point, if the player tries to place a fourth emoji, the oldest one — which is always at index 0 — is removed. This is done by setting that index on the board to null (newBoard[oldestIndex] = null) and removing it from the player's emoji history using currentEmojis.shift(). This creates a vanishing effect.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Improvements With More Time:
+
+1.Score tracker for multiple rounds.
+
+2.Track game history or scores.
+
+3.Add player name input and emoji previews before game start.
+
+4.Introduce AI opponents with easy/medium/hard modes.
+
+5.Increased board sizes(4x4 or 5x5) grids for more complex gameplay.
