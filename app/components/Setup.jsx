@@ -68,7 +68,11 @@ Space: [
             <label className="block text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-indigo-700">🎯 Player 1:</label>
             <select 
               className="text-black w-full border-3 border-purple-300 rounded-xl p-2 sm:p-3 text-base sm:text-lg bg-white focus:border-purple-500" 
-              onChange={(e)=>props.setEmojiPool1(EMOJI_CATEGORIES[e.target.value])}
+              onChange={(e)=>{
+                const audio = new Audio('/sounds/blip.mp3');
+                audio.play();
+                props.setEmojiPool1(EMOJI_CATEGORIES[e.target.value])
+              }}
             >
               <option>✨ Select Emoji Category ✨</option>
               {Object.keys(EMOJI_CATEGORIES).map((category) => (
@@ -82,7 +86,11 @@ Space: [
             <label className="block text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-indigo-700">🎯 Player 2:</label>
             <select 
               className="text-black w-full border-3 border-purple-300 rounded-xl p-2 sm:p-3 text-base sm:text-lg bg-gradient-to-r bg-white focus:border-purple-500" 
-              onChange={(e)=>props.setEmojiPool2(EMOJI_CATEGORIES[e.target.value])}
+              onChange={(e)=>{
+                const audio = new Audio('/sounds/blip.mp3');
+                audio.play();
+                props.setEmojiPool2(EMOJI_CATEGORIES[e.target.value])
+              }}
             >
               <option>✨ Select Emoji Category ✨</option>
               {Object.keys(EMOJI_CATEGORIES).map((category) => (

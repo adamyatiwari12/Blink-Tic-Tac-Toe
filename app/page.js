@@ -99,7 +99,9 @@ export default function BlinkTicTacToe() {
         </h1>
         <button
           className="absolute top-4 right-4 max-sm:right-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-2 px-3 sm:px-4 rounded-full transition-all duration-200 hover:scale-105 text-sm sm:text-base"
-          onClick={() => setShowHelp(true)}
+          onClick={() => {
+            playSound("help.mp3");
+            setShowHelp(true)}}
         >
           <HelpCircle className="inline w-3 h-3 sm:w-5 sm:h-5"/> <span className="hidden sm:inline">Help</span>
         </button>
