@@ -2,6 +2,8 @@
 import { useState } from "react";
 import Setup from "./components/Setup";
 import Cell from "./components/Cell";
+import HelpSection from "./components/HelpSection";
+import { HelpCircle } from "lucide-react";
 
 export default function BlinkTicTacToe() {
 
@@ -14,13 +16,19 @@ export default function BlinkTicTacToe() {
   const [player2Emojis, setPlayer2Emojis] = useState([]);
   const [winner, setWinner] = useState(null);
   const [winningCells, setWinningCells] = useState([]);
-
+  const [showHelp, setShowHelp] = useState(false);
+  
   const winningCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6],];
-
+  
   function getRandomEmoji() {
     const pool = currentPlayer === 1 ? emojiPool1 : emojiPool2;
     return pool[Math.floor(Math.random() * pool.length)];
-  }
+  };
+  
+  const playSound = (filename) => {
+  const audio = new Audio(`/sounds/${filename}`);
+  audio.play();
+};
 
   const handleCellClick = (index) => {
     if (board[index]){
@@ -80,10 +88,6 @@ export default function BlinkTicTacToe() {
     }
   };
 
-  const playSound = (filename) => {
-  const audio = new Audio(`/sounds/${filename}`);
-  audio.play();
-};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900">
@@ -91,7 +95,15 @@ export default function BlinkTicTacToe() {
         <h1 className="text-6xl font-bold text-center bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent animate-pulse">
           ✨ Blink Tic Tac Toe ✨
         </h1>
+        <button
+          className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-bold py-2 px-4 rounded-full transition-all duration-200 hover:scale-105"
+          onClick={() => setShowHelp(true)}
+        >
+          <HelpCircle className="inline"/> Help
+        </button>
       </div>
+
+      {showHelp && <HelpSection setShowHelp={setShowHelp} />}
       
       {gameState === "setup" && (
         <Setup
